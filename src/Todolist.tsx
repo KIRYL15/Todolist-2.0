@@ -1,41 +1,43 @@
-import React, {FC} from 'react';
+import React, {ChangeEvent, FC, useState} from 'react';
 import s from './Todolist.module.css'
 import {FilterValueType, TasksType} from "./App";
-
+import {TasksList} from "./TasksList";
 type TodolistType = {
     title: string,
     tasks: Array<TasksType>
-    removeTask: (taskId: number) => void,
+    removeTask: (taskId: string) => void,
     changeTodolistFilter: (filter: FilterValueType) => void
-
+    addTask: (newTitle: string) => void
 }
 export const Todolist: FC<TodolistType> = (props) => {
+    const [titleForInput, setTitleForInput] = useState<string>('')
+    console.log(titleForInput)
     const onClickButtonAll = () => props.changeTodolistFilter("all")
     const onClickButtonActive = () => props.changeTodolistFilter("active")
     const onClickButtonCompleted = () => props.changeTodolistFilter("completed")
+    const onClickHandler = () => {
+        props.addTask(titleForInput)
+        setTitleForInput('')
 
-    const todolistItems = props.tasks.map((m) => {
-        return (
-            <li key={m.id}>
-                <input type="checkbox" checked={m.isDone}/>
-                <span>{m.title}</span>
-                <button onClick={() => {
-                    props.removeTask(m.id)}}>X</button>
-            </li>
-        )
-    })
+    }
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitleForInput(e.currentTarget.value)
+
+    }
     return (
         <div className={s.Todolist}>
             <h3>{props.title}</h3>
             <div>
-                <input/>
-                <button onClick={() => {
-                    console.log(props.tasks)
-                }}>+
-                </button>
+                <input
+                    value={titleForInput}
+                    onChange={onChangeHandler}/>
+                <button onClick={onClickHandler}>+</button>
+                {titleForInput.length > 15 && <div style={{color: "hotpink"}}>Task title is long</div>}
             </div>
             <ul>
-                {todolistItems}
+                <TasksList
+                    removeTask={props.removeTask}
+                    tasks={props.tasks}/>
             </ul>
             <div>
                 <button onClick={onClickButtonAll}>All</button>
