@@ -30,8 +30,11 @@ export const App = (): JSX.Element => {
         }
         setTasks([newTask, ...tasks])
     }
+    const changeTaskStatus = (tId: string, newIsDone:boolean) => {
+        debugger
+        setTasks(tasks.map((m) => m.id === tId ? {...m, isDone: newIsDone} : m))
+    }
     const [filter, setFilter] = useState<FilterValueType>("all")
-
     const getFilteredTasks = (tasks: Array<TasksType>, filter: FilterValueType): Array<TasksType> => {
         switch (filter) {
             case "active":
@@ -42,7 +45,6 @@ export const App = (): JSX.Element => {
                 return tasks
         }
     }
-
     const tasksForRender: Array<TasksType> = getFilteredTasks(tasks, filter)
 //UI
     return (
@@ -53,6 +55,8 @@ export const App = (): JSX.Element => {
                 removeTask={removeTask}
                 changeTodolistFilter={changeTodolistFilter}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
+                filter={filter}
             />
         </div>
     );

@@ -1,0 +1,9 @@
+.Task {
+    font-weight: bold;
+}
+
+.TaskDone {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
