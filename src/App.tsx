@@ -21,9 +21,7 @@ export const App = (): JSX.Element => {
     const removeTask = (taskId: string) => {
         setTasks(tasks.filter((f) => f.id !== taskId))
     }
-    const changeTodolistFilter = (filter: FilterValueType) => {
-        setFilter(filter)
-    }
+    const changeTodolistFilter = (filter: FilterValueType) => setFilter(filter)
     const addTask = (newTitle: string) => {
         const newTask = {
             id: v1(),
@@ -33,17 +31,20 @@ export const App = (): JSX.Element => {
         setTasks([newTask, ...tasks])
     }
     const [filter, setFilter] = useState<FilterValueType>("all")
-    let tasksForRender: Array<TasksType> = []
-    if (filter === "all") {
-        tasksForRender = tasks
-    }
-    if (filter === "active") {
-        tasksForRender = tasks.filter(t => !t.isDone)
-    }
-    if (filter === "completed") {
-        tasksForRender = tasks.filter(t => t.isDone)
+
+    const getFilteredTasks = (tasks: Array<TasksType>, filter: FilterValueType): Array<TasksType> => {
+        switch (filter) {
+            case "active":
+                return tasks.filter(t => !t.isDone)
+            case "completed":
+                return tasks.filter(t => t.isDone)
+            default:
+                return tasks
+        }
     }
 
+    const tasksForRender: Array<TasksType> = getFilteredTasks(tasks, filter)
+//UI
     return (
         <div className="App">
             <Todolist
