@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 export type TasksType = {
     id: string,
@@ -40,13 +41,7 @@ export const App = (): JSX.Element => {
             {id: v1(), title: "BREAD", isDone: true},
         ]
     })
-//BLL
-    /*const [tasks, setTasks] = useState<Array<TasksType>>([
-        {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: false},
-        {id: v1(), title: "React", isDone: true},
-        {id: v1(), title: "REDUX", isDone: false},
-    ])*/
+    //BLL
     const removeTask = (taskId: string, todolistId: string) => {
         setTasks({
             ...tasks,
@@ -65,7 +60,6 @@ export const App = (): JSX.Element => {
     const changeTodolistFilter = (filter: FilterValueType, todolistId: string) => {
         setTodolists(todolists.map(m => m.id === todolistId ? {...m, filter: filter} : m))
     }
-
     const changeTaskStatus = (tId: string, newIsDone: boolean, todolistId: string) => {
         debugger
         setTasks({
@@ -74,7 +68,6 @@ export const App = (): JSX.Element => {
                 .map(m => m.id === tId ? {...m, isDone: newIsDone} : m)
         })
     }
-    /*const [filter, setFilter] = useState<FilterValueType>("all")*/
     const removeTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(f => f.id !== todolistId))
         //delete tasks[todolistId]
@@ -92,37 +85,45 @@ export const App = (): JSX.Element => {
                 return tasks
         }
     }
-
-    const todolistsComponents = todolists.map(m => {
-        const tasksForRender: Array<TasksType> = getFilteredTasks(tasks[m.id], m.filter)
-        return (
-            <Todolist
-                //данные
-                key={m.id}
-                todolistId={m.id}
-                title={m.title}
-                filter={m.filter}
-                tasks={tasksForRender}
-                //функции для тасок
-                removeTask={removeTask}
-                addTask={addTask}
-                changeTaskStatus={changeTaskStatus}
-                //функции для тудулистов
-                changeTodolistFilter={changeTodolistFilter}
-                removeTodolist={removeTodolist}
-            />
-        )
-    })
-
-
-
-
-
+    const addTodolist = (title: string) => {
+        const newTodolistId = v1()
+        const newTodolist: TodolistType = {
+            id: newTodolistId,
+            title: title,
+            filter: 'all'
+        }
+        setTodolists([newTodolist,...todolists])
+        setTasks({[newTodolistId]: [],...tasks})
+    }
+    const todolistsComponents = todolists
+        .map(m => {
+            const tasksForRender: Array<TasksType> = getFilteredTasks(tasks[m.id], m.filter)
+            return (
+                <Todolist
+                    //данные
+                    key={m.id}
+                    todolistId={m.id}
+                    title={m.title}
+                    filter={m.filter}
+                    tasks={tasksForRender}
+                    //функции для тасок
+                    removeTask={removeTask}
+                    addTask={addTask}
+                    changeTaskStatus={changeTaskStatus}
+                    //функции для тудулистов
+                    changeTodolistFilter={changeTodolistFilter}
+                    removeTodolist={removeTodolist}
+                />
+            )
+        })
 //UI
     return (
         <div className="App">
+            <AddItemForm
+                maxLenghtUserMessage={15}
+                addNewItem={addTodolist}
+            />
             {todolistsComponents}
         </div>
     );
 }
-
