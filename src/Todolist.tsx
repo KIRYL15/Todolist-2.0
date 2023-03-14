@@ -4,13 +4,18 @@ import {FilterValueType, TasksType} from "./App";
 import {TasksList} from "./TasksList";
 
 type TodolistType = {
+    //данные
+    todolistId:string
     title: string,
     tasks: Array<TasksType>,
-    removeTask: (taskId: string) => void,
-    changeTodolistFilter: (filter: FilterValueType) => void,
-    addTask: (newTitle: string) => void,
-    changeTaskStatus: (tId: string, newIsDone: boolean) => void,
     filter: FilterValueType
+    //функции для тасок
+    removeTask: (taskId: string, todolistId: string) => void,
+    addTask: (newTitle: string, todolistId: string) => void,
+    changeTaskStatus: (tId: string, newIsDone: boolean, todolistId: string) => void,
+    //функции для тудулистов
+    changeTodolistFilter: (filter: FilterValueType, todolistId: string) => void,
+    removeTodolist: (todolistId: string) => void
 }
 export const Todolist: FC<TodolistType> = (props) => {
     const [titleForInput, setTitleForInput] = useState<string>('')
@@ -19,13 +24,14 @@ export const Todolist: FC<TodolistType> = (props) => {
     const isUserMessageToLong: boolean = titleForInput.length > maxLenghtUserMessage
 //функция которая в параметрах принимает filter и возвращает функцию которая изменит значение на filter
     const handlerCreator = (filter: FilterValueType) => {
-        return () => props.changeTodolistFilter(filter)
+        return () => props.changeTodolistFilter(filter, props.todolistId)
     }
+const removeTodolist=()=>{props.removeTodolist(props.todolistId)}
 
     const onClickHandler = () => {
         const trimedTitle = titleForInput.trim()
         if (trimedTitle) {
-            props.addTask(trimedTitle)
+            props.addTask(trimedTitle, props.todolistId)
         } else {
             setError(true)
         }
@@ -42,7 +48,9 @@ export const Todolist: FC<TodolistType> = (props) => {
     const isAddButtonDisabled = isUserMessageToLong || titleForInput.length === 0
     return (
         <div className={s.Todolist}>
-            <h3>{props.title}</h3>
+            <h3>{props.title}
+             <button onClick={removeTodolist}>X</button>
+            </h3>
             <div>
                 <input
                     className={inputErrorClasses}
@@ -58,13 +66,12 @@ export const Todolist: FC<TodolistType> = (props) => {
                 {userMaxLenghtMessage}
                 {userErrorMessage}
             </div>
-            <ul>
                 <TasksList
+                    todolistId={props.todolistId}
                     removeTask={props.removeTask}
                     tasks={props.tasks}
                     changeTaskStatus={props.changeTaskStatus}
                 />
-            </ul>
             <div>
                 <button
                     className={props.filter === "all" ? s.ActiveFilter : s.ActiveFilterNone}
