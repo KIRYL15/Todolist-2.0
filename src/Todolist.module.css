@@ -1,34 +1,35 @@
-.Todolist {
-    border: 2px solid hotpink;
-    border-radius: 3px;
-    padding: 20px;
-    background: rgba(95, 158, 160, 0.42);
-}
-
-/*.Todolist:hover {*/
-/*    background: rgba(95, 158, 160, 0.9);*/
+/*.Todolist {*/
+/*    border: 2px solid hotpink;*/
+/*    border-radius: 3px;*/
+/*    padding: 20px;*/
+/*    background: rgba(95, 158, 160, 0.42);*/
 /*}*/
+/*.ActiveFilter {*/
+/*    background-color: plum;*/
+/*    border-color: plum;*/
+/*    color: antiquewhite;*/
+/*}*/
+/*.ActiveFilterNone{*/
+/*    background-color: #76a0cb;*/
+/*    border-color: #83bbef;*/
+/*    color: antiquewhite;*/
+/*}*/
+/*.ActiveFilter:hover {*/
+/*    border-color: #645e57;*/
+/*    color: antiquewhite;*/
+/*    cursor: pointer;*/
+/*}*/
+/*.ActiveFilterNone:hover{*/
+/*    border-color: #645e57;*/
+/*    color: antiquewhite;*/
+/*    cursor: pointer;*/
+/*}*/
+/*.InputError{*/
+/*    border-color: red;*/
+/*}*/
+/*.FilterButtonContainer{*/
+/*    !*display: flex;*!*/
+/*    justify-content: space-between;*/
+/*    gap: 3px;*/
 
-.ActiveFilter {
-    background-color: plum;
-    border-color: plum;
-    color: antiquewhite;
-}
-.ActiveFilterNone{
-    background-color: #76a0cb;
-    border-color: #83bbef;
-    color: antiquewhite;
-}
-.ActiveFilter:hover {
-    border-color: #645e57;
-    color: antiquewhite;
-    cursor: pointer;
-}
-.ActiveFilterNone:hover{
-    border-color: #645e57;
-    color: antiquewhite;
-    cursor: pointer;
-}
-.InputError{
-    border-color: red;
-}
+/*}*/

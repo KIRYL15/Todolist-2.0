@@ -2,6 +2,8 @@ import {TasksType} from "./App";
 import s from "./Tasks.module.css"
 import {EditableSpan} from "./EditableSpan";
 import React, {ChangeEvent, FC} from 'react';
+import {Checkbox, IconButton, List, ListItem} from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 type TasksListType = {
     todolistId: string,
@@ -16,34 +18,36 @@ export const TasksList: FC<TasksListType> = (props): JSX.Element => {
             const removeTaskHandler = () => {
                 return (props.removeTask(m.id, props.todolistId))
             }
-            const changeTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            const changeTaskHandler = (e: ChangeEvent<HTMLInputElement>) =>
                 props.changeTaskStatus(m.id, e.currentTarget.checked, props.todolistId)
-            }
             const spanClasses = m.isDone ? s.TaskDone : s.Task
-            const changeTaskTitleHandler = (title: string) => {
-                props.changeTaskTitle(m.id, title, props.todolistId)
-            }
+            const changeTaskTitleHandler = (title: string) => props.changeTaskTitle(m.id, title, props.todolistId)
+
             return (
-                <li key={m.id}>
-                    <input
-                        type="checkbox"
+                <ListItem key={m.id}>
+                    <Checkbox
                         checked={m.isDone}
+                        size={"small"}
                         onChange={changeTaskHandler}
-                    />
-                    {/*<span className={spanClasses}>{m.title}</span>*/}
+                        color={"success"}/>
                     <EditableSpan
                         title={m.title}
                         taskClasses={spanClasses}
                         changeTitle={changeTaskTitleHandler}/>
-                    <button onClick={removeTaskHandler}>X</button>
-                </li>
+                    <IconButton
+                        size={"small"}
+                        color={"inherit"}
+                        onClick={removeTaskHandler}>
+                        <DeleteOutlineIcon/>
+                    </IconButton>
+                </ListItem>
             )
         })
         : <span>Your taskslist is empty</span>
     return (
-        <ul>
+        <List>
             {taskItems}
-        </ul>
+        </List>
     );
 };
 

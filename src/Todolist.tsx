@@ -1,9 +1,11 @@
 import React, {FC} from 'react';
-import s from './Todolist.module.css'
+//import s from './Todolist.module.css'
 import {TasksList} from "./TasksList";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {FilterValueType, TasksType} from "./App";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {Button, ButtonGroup, IconButton, Typography} from "@mui/material";
 
 type TodolistType = {
     //данные
@@ -20,7 +22,6 @@ type TodolistType = {
     removeTodolist: (todolistId: string) => void,
     changeTodolistTitle: (title: string, todolistId: string) => void,
     changeTodolistFilter: (filter: FilterValueType, todolistId: string) => void,
-
 }
 export const Todolist: FC<TodolistType> = (props) => {
 //функция которая в параметрах принимает filter и возвращает функцию которая изменит значение на filter
@@ -38,36 +39,37 @@ export const Todolist: FC<TodolistType> = (props) => {
         props.changeTodolistTitle(title, props.todolistId)
     }
     return (
-        <div className={s.Todolist}>
-            <h3>
-                <EditableSpan
-                    title={props.title}
-                    changeTitle={changeTodolistTitle}/>
-                <button onClick={removeTodolist}>X</button>
-            </h3>
+        <div>
+            <Typography fontWeight="bold" align="inherit">
+                <EditableSpan title={props.title} changeTitle={changeTodolistTitle}/>
+                <IconButton color={"inherit"} onClick={removeTodolist}><DeleteOutlineIcon/></IconButton>
+            </Typography>
             <AddItemForm maxLenghtUserMessage={15} addNewItem={addTask}/>
             <TasksList
+                tasks={props.tasks}
                 todolistId={props.todolistId}
                 removeTask={props.removeTask}
-                tasks={props.tasks}
-                changeTaskStatus={props.changeTaskStatus}
                 changeTaskTitle={props.changeTaskTitle}
+                changeTaskStatus={props.changeTaskStatus}/>
+            <ButtonGroup
+                size="small"
+                fullWidth
+                variant="contained"
+                disableElevation>
+                <Button
+                    sx={{mr: "2px"}}
+                    color={props.filter === "all" ? "secondary" : "primary"}
+                    onClick={handlerCreator("all")}>All</Button>
+                <Button
+                    sx={{mr: "2px"}}
+                    color={props.filter === "active" ? "secondary" : "primary"}
+                    onClick={handlerCreator("active")}>Active</Button>
+                <Button
+                    sx={{mr: "2px"}}
+                    color={props.filter === "completed" ? "secondary" : "primary"}
+                    onClick={handlerCreator("completed")}>Completed</Button>
+            </ButtonGroup>
 
-            />
-            <div>
-                <button
-                    className={props.filter === "all" ? s.ActiveFilter : s.ActiveFilterNone}
-                    onClick={handlerCreator("all")}>All
-                </button>
-                <button
-                    className={props.filter === "active" ? s.ActiveFilter : s.ActiveFilterNone}
-                    onClick={handlerCreator("active")}>Active
-                </button>
-                <button
-                    className={props.filter === "completed" ? s.ActiveFilter : s.ActiveFilterNone}
-                    onClick={handlerCreator("completed")}>Completed
-                </button>
-            </div>
         </div>
     );
 };

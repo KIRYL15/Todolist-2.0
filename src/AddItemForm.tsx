@@ -1,22 +1,20 @@
 import s from "./Todolist.module.css";
+import {Button, TextField} from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 
 type AddItemFormType = {
     maxLenghtUserMessage: number,
     addNewItem: (newTitle: string) => void,
 }
-export const AddItemForm: FC<AddItemFormType> = ({
-      maxLenghtUserMessage,
-      addNewItem,
-}) => {
+export const AddItemForm: FC<AddItemFormType> = ({maxLenghtUserMessage, addNewItem}) => {
     const [titleForInput, setTitleForInput] = useState<string>('')
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error && setError(false)
         setTitleForInput(e.currentTarget.value)
     }
     const isUserMessageToLong: boolean = titleForInput.length > maxLenghtUserMessage
-    const isAddButtonDisabled = isUserMessageToLong
-        || titleForInput.length === 0
+    const isAddButtonDisabled = isUserMessageToLong || titleForInput.length === 0
     const [error, setError] = useState(false)
     const userErrorMessage = error
         && <div style={{color: "red"}}>Title is required</div>
@@ -26,26 +24,26 @@ export const AddItemForm: FC<AddItemFormType> = ({
     const onKeyDownAddItem = (e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && addItem()
     const addItem = () => {
         const trimedTitle = titleForInput.trim()
-        if (trimedTitle) {
-            addNewItem(trimedTitle)
-        } else {
-            setError(true)
-        }
+        trimedTitle ? addNewItem(trimedTitle) : setError(true)
         setTitleForInput('')
     }
     return (
         <div>
-            <input
-                className={inputErrorClasses}
-                placeholder={"Please enter title"}
+            <TextField
+                size="small"
+                label="Please enter title"
+                variant="outlined"
                 value={titleForInput}
                 onChange={onChangeHandler}
                 onKeyDown={onKeyDownAddItem}
-            />
-            <button
+                /* className={inputErrorClasses}*//>
+            <Button
+                color="secondary"
                 disabled={isAddButtonDisabled}
-                onClick={addItem}>+
-            </button>
+                size={"large"}
+                onClick={addItem}
+                endIcon={<AddCircleIcon/>}>Add
+            </Button>
             {userMaxLenghtMessage}
             {userErrorMessage}
         </div>
