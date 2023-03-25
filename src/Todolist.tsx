@@ -7,7 +7,7 @@ import {FilterValueType, TasksType} from "./App";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {Button, ButtonGroup, IconButton, Typography} from "@mui/material";
 
-type TodolistType = {
+export type TodolistPropsType = {
     //данные
     title: string,
     todolistId: string,
@@ -23,7 +23,7 @@ type TodolistType = {
     changeTodolistTitle: (title: string, todolistId: string) => void,
     changeTodolistFilter: (filter: FilterValueType, todolistId: string) => void,
 }
-export const Todolist: FC<TodolistType> = (props) => {
+export const Todolist: FC<TodolistPropsType> = (props) => {
 //функция которая в параметрах принимает filter и возвращает функцию которая изменит значение на filter
     const handlerCreator = (filter: FilterValueType) => {
         return () => props.changeTodolistFilter(filter, props.todolistId)

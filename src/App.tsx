@@ -12,7 +12,7 @@ export type TasksType = {
     isDone: boolean
 }
 export type FilterValueType = "all" | "active" | "completed"
-type TodolistType = {
+export type TodolistType = {
     id: string,
     title: string,
     filter: FilterValueType,
@@ -20,7 +20,7 @@ type TodolistType = {
 type TasksStateType = {
     [todolistId: string]: Array<TasksType>
 }
-type TodolistsStateType = Array<TodolistType>
+export type TodolistsStateType = Array<TodolistType>
 export const App = (): JSX.Element => {
     //BLL
     //список тудулистов
@@ -75,9 +75,6 @@ export const App = (): JSX.Element => {
         })
     }
 
-    const changeTodolistFilter = (filter: FilterValueType, todolistId: string) => {
-        setTodolists(todolists.map(m => m.id === todolistId ? {...m, filter: filter} : m))
-    }
     const removeTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(f => f.id !== todolistId))
         const copyTasks = {...tasks}
@@ -97,6 +94,9 @@ export const App = (): JSX.Element => {
     }    //добавление тудулистов
     const changeTodolistTitle = (newTitle: string, todolistId: string) => {
         setTodolists(todolists.map(m => m.id === todolistId ? {...m, title: newTitle} : m))
+    }
+    const changeTodolistFilter = (filter: FilterValueType, todolistId: string) => {
+        setTodolists(todolists.map(m => m.id === todolistId ? {...m, filter: filter} : m))
     }
 
     const getFilteredTasks = (tasks: Array<TasksType>, filter: FilterValueType): Array<TasksType> => {
