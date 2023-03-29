@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {App} from './App';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {green, lightBlue} from "@mui/material/colors";
+import {AppWithReducers} from "./AppWithReducers";
 
 const theme = createTheme({
     palette: {
@@ -17,8 +17,9 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement);
 root.render(
     <ThemeProvider theme={theme}>
+        {/*обнулить стили*/}
         <CssBaseline/>
-        <App/>
+        <AppWithReducers/>
     </ThemeProvider>
 );
 
