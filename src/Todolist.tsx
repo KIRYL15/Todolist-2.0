@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {TasksList} from "./TasksList";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
-import {FilterValueType, TasksType} from "./App";
+import {FilterValueType, TasksType} from "./AppWithRedux";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {Button, ButtonGroup, IconButton, Typography} from "@mui/material";
 

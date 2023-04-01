@@ -149,11 +149,10 @@ export const AppWithReducers = (): JSX.Element => {
         .map(m => {
             const tasksForRender: Array<TasksType> = getFilteredTasks(tasks[m.id], m.filter)
             return (
-                <Grid item>
+                <Grid key={m.id} item>
                     <Paper elevation={3}>
                         <Todolist
                             //данные
-                            key={m.id}
                             title={m.title}
                             todolistId={m.id}
                             filter={m.filter}

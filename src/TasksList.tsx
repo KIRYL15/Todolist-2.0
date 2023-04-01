@@ -1,4 +1,4 @@
-import {TasksType} from "./App";
+import {TasksType} from "./AppWithRedux";
 import s from "./Tasks.module.css"
 import {EditableSpan} from "./EditableSpan";
 import React, {ChangeEvent, FC} from 'react';
