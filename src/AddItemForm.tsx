@@ -1,52 +1,40 @@
-import s from "./Todolist.module.css";
-import {Button, TextField} from "@mui/material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import {AddBox} from "@mui/icons-material";
+import {IconButton, TextField} from "@mui/material";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 
-type AddItemFormType = {
-    maxLenghtUserMessage: number,
-    addNewItem: (newTitle: string) => void,
+type AddItemFormPropsType = {
+    addItem: (title: string) => void
 }
-export const AddItemForm: FC<AddItemFormType> = ({maxLenghtUserMessage, addNewItem}) => {
-    const [titleForInput, setTitleForInput] = useState<string>('')
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        error && setError(false)
-        setTitleForInput(e.currentTarget.value)
-    }
-    const isUserMessageToLong: boolean = titleForInput.length > maxLenghtUserMessage
-    const isAddButtonDisabled = isUserMessageToLong || titleForInput.length === 0
-    const [error, setError] = useState(false)
-    const userErrorMessage = error
-        && <div style={{color: "red"}}>Title is required</div>
-    const userMaxLenghtMessage = isUserMessageToLong
-        && <div style={{color: "hotpink"}}>Task title is long</div>
-    const inputErrorClasses = error || isUserMessageToLong ? s.InputError : ""
-    const onKeyDownAddItem = (e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && addItem()
+export const AddItemForm=memo((props: AddItemFormPropsType)=> {
+    let [title, setTitle] = useState("")
+    let [error, setError] = useState<string | null>(null)
     const addItem = () => {
-        const trimedTitle = titleForInput.trim()
-        trimedTitle ? addNewItem(trimedTitle) : setError(true)
-        setTitleForInput('')
+        if (title.trim() !== "") {
+            props.addItem(title);
+            setTitle("");
+        } else {
+            setError("Title is required");
+        }
     }
-    return (
-        <div>
-            <TextField
-                size="small"
-                label="Please enter title"
-                variant="outlined"
-                value={titleForInput}
-                onChange={onChangeHandler}
-                onKeyDown={onKeyDownAddItem}
-                /* className={inputErrorClasses}*//>
-            <Button
-                color="secondary"
-                disabled={isAddButtonDisabled}
-                size={"large"}
-                onClick={addItem}
-                endIcon={<AddCircleIcon/>}>Add
-            </Button>
-            {userMaxLenghtMessage}
-            {userErrorMessage}
-        </div>
-    );
-};
-
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {setTitle(e.currentTarget.value)}
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        //благодаря if (error), избавляемся от лишней перерисовки
+        if (error) setError(null);
+        if (e.charCode === 13) {
+            addItem();
+        }
+    }
+    return <div>
+        <TextField variant="outlined"
+                   error={!!error}
+                   value={title}
+                   onChange={onChangeHandler}
+                   onKeyPress={onKeyPressHandler}
+                   label="Title"
+                   helperText={error}
+        />
+        <IconButton color="primary" onClick={addItem}>
+            <AddBox />
+        </IconButton>
+    </div>
+})

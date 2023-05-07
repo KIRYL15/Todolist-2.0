@@ -1,76 +1,98 @@
-import React, {FC} from 'react';
-//import s from './Todolist.module.css'
-import {TasksList} from "./TasksList";
+import {Task} from "./Task";
 import {AddItemForm} from "./AddItemForm";
+import {Delete} from "@mui/icons-material";
 import {EditableSpan} from "./EditableSpan";
-import {FilterValueType, TasksType} from "./AppWithRedux";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import {Button, ButtonGroup, IconButton, Typography} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
+import {addTasksAC} from "./reducers/tasks-reducer";
+import React, {memo, useCallback, useMemo} from 'react';
+import {AppRootStateType, store} from "./reducers/store";
+import {TasksType, TodolistType} from "./api/todolists-api";
+import {Provider, useDispatch, useSelector} from "react-redux";
+import {ChangeTodolistFilterAC, ChangeTodolistTitleAC, RemoveTodolistAC} from "./reducers/todolists-reducer";
 
-export type TodolistPropsType = {
-    //данные
-    title: string,
-    todolistId: string,
-    filter: FilterValueType,
-    tasks: Array<TasksType>,
-    //функции для тасок
-    addTask: (newTitle: string, todolistId: string) => void,
-    removeTask: (taskId: string, todolistId: string) => void,
-    changeTaskTitle: (tId: string, newTitle: string, todolistId: string) => void
-    changeTaskStatus: (tId: string, newIsDone: boolean, todolistId: string) => void,
-    //функции для тудулистов
-    removeTodolist: (todolistId: string) => void,
-    changeTodolistTitle: (title: string, todolistId: string) => void,
-    changeTodolistFilter: (filter: FilterValueType, todolistId: string) => void,
+type PropsType = {
+    todolist: TodolistType
 }
-export const Todolist: FC<TodolistPropsType> = (props) => {
-//функция которая в параметрах принимает filter и возвращает функцию которая изменит значение на filter
-    const handlerCreator = (filter: FilterValueType) => {
-        return () => props.changeTodolistFilter(filter, props.todolistId)
-    }
-    const removeTodolist = () => {
-        props.removeTodolist(props.todolistId)
-    }
-    const addTask = (title: string) => {
-        props.addTask(title, props.todolistId)
-    }
-    const changeTodolistTitle = (title: string) => {
-        //debugger
-        props.changeTodolistTitle(title, props.todolistId)
-    }
-    return (
+
+export const Todolist = React.memo(({todolist}: PropsType) => {
+    const {id, title, filter} = todolist
+    let tasks = useSelector<AppRootStateType, Array<TasksType>>((state => state.tasks[id]))
+    let dispatch = useDispatch()
+
+    const addTask = useCallback((title: string) => dispatch(addTasksAC(title, id)), [dispatch])
+    const removeTodolist = useCallback(() =>
+        dispatch(RemoveTodolistAC(id)), [dispatch])
+    const changeTodolistTitle = useCallback((title: string) =>
+        dispatch(ChangeTodolistTitleAC(id, title)), [dispatch])
+
+    const onAllClickHandler = useCallback(() =>
+        dispatch(ChangeTodolistFilterAC(id, "all")), [dispatch])
+    const onActiveClickHandler = useCallback(() =>
+        dispatch(ChangeTodolistFilterAC(id, "active")), [dispatch])
+    const onCompletedClickHandler = useCallback(() =>
+        dispatch(ChangeTodolistFilterAC(id, "completed")), [dispatch])
+
+    useMemo(() => {
+        if (filter === "active") {
+            tasks = tasks.filter(t => !t.isDone);
+        }
+        if (filter === "completed") {
+            tasks = tasks.filter(t => t.isDone);
+        }
+        return tasks
+    }, [filter])
+
+    return <div>
+        <h3>
+            <EditableSpan value={title} onChange={changeTodolistTitle}/>
+            <IconButton onClick={removeTodolist}><Delete/></IconButton>
+        </h3>
+        <AddItemForm addItem={addTask}/>
         <div>
-            <Typography fontWeight="bold" align="inherit">
-                <EditableSpan title={props.title} changeTitle={changeTodolistTitle}/>
-                <IconButton color={"inherit"} onClick={removeTodolist}><DeleteOutlineIcon/></IconButton>
-            </Typography>
-            <AddItemForm maxLenghtUserMessage={15} addNewItem={addTask}/>
-            <TasksList
-                tasks={props.tasks}
-                todolistId={props.todolistId}
-                removeTask={props.removeTask}
-                changeTaskTitle={props.changeTaskTitle}
-                changeTaskStatus={props.changeTaskStatus}/>
-            <ButtonGroup
-                size="small"
-                fullWidth
-                variant="contained"
-                disableElevation>
-                <Button
-                    sx={{mr: "2px"}}
-                    color={props.filter === "all" ? "secondary" : "primary"}
-                    onClick={handlerCreator("all")}>All</Button>
-                <Button
-                    sx={{mr: "2px"}}
-                    color={props.filter === "active" ? "secondary" : "primary"}
-                    onClick={handlerCreator("active")}>Active</Button>
-                <Button
-                    sx={{mr: "2px"}}
-                    color={props.filter === "completed" ? "secondary" : "primary"}
-                    onClick={handlerCreator("completed")}>Completed</Button>
-            </ButtonGroup>
+            {tasks.map(t => {
+                return (
+                    <Provider store={store}>
+                        <Task
+                        key={t.id}
+                        task={t}
+                        todolistId={id}/>
+                    </Provider>
+                )
+            })}
+        </div>
+        <div style={{paddingTop: "10px"}}>
+            <ButtonWithMemo
+                title={"All"}
+                color={'warning'}
+                variant={filter === 'all' ? 'outlined' : 'text'}
+                onClick={onAllClickHandler}/>
+            <ButtonWithMemo
+                title={"Active"}
+                color={'primary'}
+                variant={filter === 'active' ? 'outlined' : 'text'}
+                onClick={onActiveClickHandler}/>
+            <ButtonWithMemo
+                title={"Completed"}
+                color={'secondary'}
+                variant={filter === 'completed' ? 'outlined' : 'text'}
+                onClick={onCompletedClickHandler}/>
+            {/*<Button variant={filter === 'all' ? 'outlined' : 'text'}
+                    onClick={onAllClickHandler}
+                    color={'warning'}>All</Button>*/}
 
         </div>
-    );
-};
+    </div>
+})
+type ButtonWithMemoPropsType = {
+    title: string
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
+    variant: 'text' | 'outlined' | 'contained'
+    onClick: () => void
+}
+let ButtonWithMemo = memo((props: ButtonWithMemoPropsType) => {
+    return <Button variant={props.variant}
+                   onClick={props.onClick}
+                   color={props.color}>{props.title}</Button>
+})
+
 

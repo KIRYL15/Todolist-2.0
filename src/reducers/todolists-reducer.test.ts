@@ -1,12 +1,12 @@
 import {v1} from "uuid";
-import {FilterValueType, TodolistType} from "../App";
 import {
     AddTodolistAC,
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
+    ChangeTodolistTitleAC, FilterValueType,
     RemoveTodolistAC,
     todolistsReducer
 } from "./todolists-reducer";
+import {TodolistType} from "../api/todolists-api";
 
 //объявляем переменные, чтобы устранить проблему с областью видимости
 let todolistId_1: string

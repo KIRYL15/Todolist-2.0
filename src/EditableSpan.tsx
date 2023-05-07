@@ -2,43 +2,39 @@ import {TextField} from "@mui/material";
 import React, {ChangeEvent, FC, useState} from 'react';
 
 type EditableSpanType = {
-    title: string,
-    taskClasses?: string,
-    changeTitle: (title: string) => void
+    value: string
+    onChange: (title: string) => void
 }
 export const EditableSpan: FC<EditableSpanType> = (
     {
-        title,
-        taskClasses,
-        changeTitle
+        value,
+        onChange,
     }
 ) => {
     const [editMode, setEditMode] = useState<boolean>(false)
-    const [titleForInput, setTitleForInput] = useState<string>(title)
+    const [title, setTitle] = useState<string>(value)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         // error && setError(false)
-        setTitleForInput(e.currentTarget.value)
+        setTitle(e.currentTarget.value)
     }
-    const onEditMode = () => {
+    const activateEditMode = () => {
         setEditMode(true)
     }
-    const offEditMode = () => {
+    const activateViewMode = () => {
         setEditMode(false)
-        changeTitle(titleForInput)
+        onChange(title)
     }
     return (
         editMode //если режим редактирования тру - переходим в инпут иначе в спан (то есть в режим показа)
             ?
             <TextField
-                value={titleForInput}
+                value={title}
                 variant="standard"
                 onChange={onChangeHandler}
                 autoFocus={true}
-                onBlur={offEditMode}
+                onBlur={activateViewMode}
             /> //должен быть контролируемый. При нажатии должны редактировать
-            : <span
-                onDoubleClick={onEditMode}
-                className={taskClasses}>{title}
+            : <span onDoubleClick={activateEditMode}>{title}
         </span> //режим показа
     );
 };

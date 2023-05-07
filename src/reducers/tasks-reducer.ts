@@ -1,6 +1,7 @@
 import {v1} from "uuid";
-import {TasksStateType, TasksType} from "../AppWithRedux";
+import {TasksStateType} from "../App";
 import {AddTodolistAT, RemoveTodolisAT} from "./todolists-reducer";
+import {TasksType} from "../api/todolists-api";
 
 export type RemoveTaskActionType = ReturnType<typeof removeTasksAC>
 export type AddTaskActionType = ReturnType<typeof addTasksAC>
@@ -24,11 +25,13 @@ export const tasksReducer = (state= initialState, action: ActionType): TasksStat
             }
         }
         case "ADD-TASK": {
+
             const newTask: TasksType = {
                 id: v1(),
                 title: action.title,
                 isDone: false
             }
+
             return {...state, [action.todolistId]: [newTask, ...state[action.todolistId]]}
         }
         case "CHANGE-TASK-STATUS":
@@ -66,6 +69,7 @@ export const removeTasksAC = (taskId: string, todolistId: string) => {
     } as const
 }
 export const addTasksAC = (title: string, todolistId: string) => {
+
     return {
         type: "ADD-TASK",
         title,
@@ -73,6 +77,7 @@ export const addTasksAC = (title: string, todolistId: string) => {
     } as const
 }
 export const changeTaskStatusAC = (taskId: string, isDone: boolean, todolistId: string) => {
+
     return {
         type: "CHANGE-TASK-STATUS",
         taskId,
