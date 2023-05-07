@@ -1,7 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import {AddItemForm} from "../AddItemForm";
 import {action} from "@storybook/addon-actions";
-import React from "react";
 
 //дефолтное значение компонента
 let meta: Meta<typeof AddItemForm> = {
