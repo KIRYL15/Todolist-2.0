@@ -1,9 +1,12 @@
 import {tasksReducer} from './tasks-reducer';
-import {combineReducers, compose, legacy_createStore} from 'redux';
+import {AnyAction, applyMiddleware, combineReducers, compose, legacy_createStore} from 'redux';
 import {todolistsReducer} from './todolists-reducer';
-declare global{
+import thunk, {ThunkDispatch} from "redux-thunk";
+import {useDispatch} from "react-redux";
+
+declare global {
     interface Window {
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?:typeof compose;
+        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
     }
 }
 // объединяя reducer-ы с помощью combineReducers,
@@ -12,10 +15,13 @@ const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer
 })
-
-const composeEnhancers=window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__||compose
+//HOC
+type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>
+export const useAppDispatch = ()=>useDispatch<AppDispatchType>()
+/////////////////////////////////////
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 // непосредственно создаём store
-export const store = legacy_createStore(rootReducer, composeEnhancers());
+export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 

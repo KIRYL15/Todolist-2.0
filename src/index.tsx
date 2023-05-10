@@ -17,8 +17,9 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
+
     <Provider store={store}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider  theme={theme}>
             {/*обнулить стили*/}
             <CssBaseline/>
             <App/>

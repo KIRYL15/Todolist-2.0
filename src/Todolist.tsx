@@ -3,23 +3,32 @@ import {AddItemForm} from "./AddItemForm";
 import {Delete} from "@mui/icons-material";
 import {EditableSpan} from "./EditableSpan";
 import {Button, IconButton} from "@mui/material";
-import {addTasksAC} from "./reducers/tasks-reducer";
-import React, {memo, useCallback, useMemo} from 'react';
-import {AppRootStateType, store} from "./reducers/store";
-import {TasksType, TodolistType} from "./api/todolists-api";
-import {Provider, useDispatch, useSelector} from "react-redux";
-import {ChangeTodolistFilterAC, ChangeTodolistTitleAC, RemoveTodolistAC} from "./reducers/todolists-reducer";
+import {Provider, useSelector} from "react-redux";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
+import {addTasksAC, createTaskTC, getTasksTC} from "./reducers/tasks-reducer";
+import React, {memo, useCallback, useEffect, useMemo} from 'react';
+import {AppRootStateType, store, useAppDispatch} from "./reducers/store";
+import {
+    ChangeTodolistFilterAC,
+    ChangeTodolistTitleAC,
+    RemoveTodolistAC,
+    TodolistDomainType
+} from "./reducers/todolists-reducer";
 
 type PropsType = {
-    todolist: TodolistType
+    todolist: TodolistDomainType
 }
 
 export const Todolist = React.memo(({todolist}: PropsType) => {
     const {id, title, filter} = todolist
-    let tasks = useSelector<AppRootStateType, Array<TasksType>>((state => state.tasks[id]))
-    let dispatch = useDispatch()
 
-    const addTask = useCallback((title: string) => dispatch(addTasksAC(title, id)), [dispatch])
+    let tasks = useSelector<AppRootStateType, Array<TaskType>>((state => state.tasks[id]))
+    const dispatch = useAppDispatch()
+    useEffect(()=>{
+        dispatch(getTasksTC(id))
+    },[])
+    const addTask = useCallback((title: string) => dispatch(createTaskTC(id, title)), [dispatch])
+
     const removeTodolist = useCallback(() =>
         dispatch(RemoveTodolistAC(id)), [dispatch])
     const changeTodolistTitle = useCallback((title: string) =>
@@ -34,14 +43,13 @@ export const Todolist = React.memo(({todolist}: PropsType) => {
 
     useMemo(() => {
         if (filter === "active") {
-            tasks = tasks.filter(t => !t.isDone);
+            tasks = tasks.filter(t => t.status===TaskStatuses.New);
         }
         if (filter === "completed") {
-            tasks = tasks.filter(t => t.isDone);
+            tasks = tasks.filter(t => t.status===TaskStatuses.Completed);
         }
         return tasks
     }, [filter])
-
     return <div>
         <h3>
             <EditableSpan value={title} onChange={changeTodolistTitle}/>
@@ -51,12 +59,12 @@ export const Todolist = React.memo(({todolist}: PropsType) => {
         <div>
             {tasks.map(t => {
                 return (
-                    <Provider store={store}>
                         <Task
-                        key={t.id}
-                        task={t}
-                        todolistId={id}/>
-                    </Provider>
+                            key={t.id}
+                            task={t}
+                            todolistId={id}
+                            status={t.status}
+                        />
                 )
             })}
         </div>

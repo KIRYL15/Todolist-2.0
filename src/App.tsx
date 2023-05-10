@@ -1,25 +1,35 @@
 import './App.css';
 import {Todolist} from "./Todolist";
-import React, {useCallback} from 'react';
+import {useSelector} from "react-redux";
 import {Menu} from "@mui/icons-material";
 import {AddItemForm} from "./AddItemForm";
-import {AppRootStateType} from "./reducers/store";
-import {useDispatch, useSelector} from "react-redux";
-import {AddTodolistAC} from "./reducers/todolists-reducer";
-import {TasksType, TodolistType} from "./api/todolists-api";
+import {TaskType} from "./api/todolists-api";
+import React, {useCallback, useEffect} from 'react';
+import {AppRootStateType, useAppDispatch} from "./reducers/store";
+import {AddTodolistAC, getTodolistsTC, TodolistDomainType} from "./reducers/todolists-reducer";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 
-export type TasksStateType = {[key: string]: TasksType[]}
+export type TasksStateType = { [key: string]: TaskType[] }
 
 export function App(): JSX.Element {
     //BLL
-    const todolist = useSelector<AppRootStateType, Array<TodolistType>>((state => state.todolists))
-    const dispatch = useDispatch()
-    const addTodolist = useCallback( (title: string) => {dispatch(AddTodolistAC(title))}, [dispatch])
-    const todolistsComponents = todolist.map(m => {
+    const todolist = useSelector<AppRootStateType, Array<TodolistDomainType>>((state => state.todolists))
+    //const dispatch = useDispatch()
+    //использовали кастомный хук useAppDispatch
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+                dispatch(getTodolistsTC())
+    }, [])
+    const addTodolist = useCallback((title: string) => {
+        dispatch(AddTodolistAC(title))
+    }, [dispatch])
+    const todolistsComponents = todolist.map((m) => {
         //const tasksForRender: Array<TasksType> = getFilteredTasks(tasks[m.id], m.filter)
         return (
+
             <Grid key={m.id} item>
+
                 <Paper elevation={3}>
                     <Todolist todolist={m}/>
                 </Paper>

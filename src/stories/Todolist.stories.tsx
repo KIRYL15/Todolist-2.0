@@ -17,7 +17,7 @@ export const CreateTodolist = () => {
 
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        todolistsAPI.createTodolist("BLA-BLA")
+        todolistsAPI.createTodolist("New todolist-6")
             .then((response) => {
                 setState(response.data)
             })
@@ -50,7 +50,7 @@ export const UpdateTodolistTitle = () => {
 export const GetTasks = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = '3a8ee05f-996c-4604-bb2f-65231b5e56f1'
+        const todolistId = 'e2e144ee-6c91-47a0-8330-d8740c0901d9'
         tasksAPI.getTasks(todolistId)
             .then((response) => {
                 setState(response.data)
@@ -96,7 +96,7 @@ return <div>
 }
 export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
-    useEffect(() => {
+/*    useEffect(() => {
         const todolistId = 'e2e144ee-6c91-47a0-8330-d8740c0901d9'
         const taskId = 'd85c9c6d-0dfb-4530-a46f-738f091b09dd'
         const title = "SUPER обновленная новая таска"
@@ -104,14 +104,14 @@ export const UpdateTask = () => {
             .then((response) => {
                 setState(response.data)
             })
-    }, [])
+    }, [])*/
     return <div>{JSON.stringify(state)}</div>
 }
 export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        const todolistId = '3a8ee05f-996c-4604-bb2f-65231b5e56f1'
-        const title = "SUPER созданная новая таска-1"
+        const todolistId = '38c9dc33-5d87-451d-9508-f8e0a7d42071'
+        const title = "SUPER созданная новая таска-5"
         tasksAPI.createTask(todolistId, title)
             .then((response) => {
                 setState(response.data)

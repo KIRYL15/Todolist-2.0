@@ -1,7 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import React from "react";
 import {App} from "../App";
-import {ReduxStoreProviderDecorator} from "./ReduxStoreProviderDecorator";
+//import {ReduxStoreProviderDecorator} from "./ReduxStoreProviderDecorator";
 
 
 //дефолтное значение компонента
@@ -9,7 +9,7 @@ import {ReduxStoreProviderDecorator} from "./ReduxStoreProviderDecorator";
 let meta: Meta<typeof App> = {
     title: 'TODOLIST/AppWithRedux',
     component: App,
-    decorators:[ReduxStoreProviderDecorator]
+    //decorators:[ReduxStoreProviderDecorator]
 
 };
 export default meta;
