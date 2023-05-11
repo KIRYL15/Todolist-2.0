@@ -6,7 +6,7 @@ import {AddItemForm} from "./AddItemForm";
 import {TaskType} from "./api/todolists-api";
 import React, {useCallback, useEffect} from 'react';
 import {AppRootStateType, useAppDispatch} from "./reducers/store";
-import {AddTodolistAC, getTodolistsTC, TodolistDomainType} from "./reducers/todolists-reducer";
+import {createTodolistTC, getTodolistsTC, TodolistDomainType} from "./reducers/todolists-reducer";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 
 export type TasksStateType = { [key: string]: TaskType[] }
@@ -22,7 +22,7 @@ export function App(): JSX.Element {
                 dispatch(getTodolistsTC())
     }, [])
     const addTodolist = useCallback((title: string) => {
-        dispatch(AddTodolistAC(title))
+        dispatch(createTodolistTC(title))
     }, [dispatch])
     const todolistsComponents = todolist.map((m) => {
         //const tasksForRender: Array<TasksType> = getFilteredTasks(tasks[m.id], m.filter)

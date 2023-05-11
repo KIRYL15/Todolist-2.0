@@ -1,16 +1,12 @@
 import {TextField} from "@mui/material";
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 
 type EditableSpanType = {
     value: string
     onChange: (title: string) => void
 }
-export const EditableSpan: FC<EditableSpanType> = (
-    {
-        value,
-        onChange,
-    }
-) => {
+export const EditableSpan: React.FC<EditableSpanType> = (
+    {value, onChange}) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(value)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
