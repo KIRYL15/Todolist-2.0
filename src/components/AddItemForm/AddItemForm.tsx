@@ -4,6 +4,7 @@ import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?:boolean
 }
 export const AddItemForm=memo((props: AddItemFormPropsType)=> {
     let [title, setTitle] = useState("")
@@ -32,8 +33,9 @@ export const AddItemForm=memo((props: AddItemFormPropsType)=> {
                    onKeyPress={onKeyPressHandler}
                    label="Title"
                    helperText={error}
+                   disabled={props.disabled}
         />
-        <IconButton color="primary" onClick={addItem}>
+        <IconButton color="primary" onClick={addItem} disabled={props.disabled}>
             <AddBox />
         </IconButton>
     </div>

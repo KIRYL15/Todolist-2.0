@@ -1,10 +1,10 @@
 import {Delete} from "@mui/icons-material";
-import {EditableSpan} from "./EditableSpan";
-import {useAppDispatch} from "./reducers/store";
+import {EditableSpan} from "./components/EditableSpan/EditableSpan";
+import {useAppDispatch} from "./app/store";
 import {TaskStatuses} from "./api/todolists-api";
 import {Checkbox, IconButton} from "@mui/material";
 import React, {ChangeEvent, memo, useCallback} from 'react';
-import {changeTaskStatusTC, changeTaskTitleTC, deleteTaskTC} from "./reducers/tasks-reducer";
+import {changeTaskStatusTC, updateTaskTC, deleteTaskTC} from "./features/TodolistsList/tasks-reducer";
 
 export type TaskPropsType = {
     taskTitle:string
@@ -28,7 +28,7 @@ export const Task: React.FC<TaskPropsType> = memo((props) => {
         [dispatch, props.taskId, props.todolistId])
 
     const onTitleChangeHandler = useCallback((newValue: string) => {
-            dispatch(changeTaskTitleTC(props.todolistId, props.taskId,newValue))
+            dispatch(updateTaskTC(props.todolistId, props.taskId, {title:newValue}))
         },
         [dispatch, props.taskId, props.todolistId])
     return (

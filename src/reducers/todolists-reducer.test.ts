@@ -1,11 +1,8 @@
 import {v1} from "uuid";
 import {
-    AddTodolistAC,
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC, FilterValueType,
-    RemoveTodolistAC,
-    todolistsReducer
-} from "./todolists-reducer";
+     FilterValueType,
+} from "../features/TodolistsList/todolists-reducer";
 import {TaskStatuses, TodolistType} from "../api/todolists-api";
 
 //объявляем переменные, чтобы устранить проблему с областью видимости

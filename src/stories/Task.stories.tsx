@@ -1,15 +1,15 @@
 import React, {ChangeEvent} from "react";
 import {Task} from "../Task";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../reducers/store";
+import {AppRootStateType} from "../app/store";
 import type {Meta, StoryObj} from '@storybook/react';
 //import {ReduxStoreProviderDecorator} from "./ReduxStoreProviderDecorator";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTasksAC} from "../reducers/tasks-reducer";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTasksAC} from "../features/TodolistsList/tasks-reducer";
 import {Checkbox, IconButton} from "@mui/material";
-import {EditableSpan} from "../EditableSpan";
+import {EditableSpan} from "../components/EditableSpan/EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {action} from "@storybook/addon-actions";
-import {TaskStatuses, TaskType} from "../api/todolists-api";
+import {TaskStatuses, TaskType, UpdateTaskModelType} from "../api/todolists-api";
 
 //дефолтное значение компонента
 let meta: Meta<typeof Task> = {
@@ -34,8 +34,8 @@ const TaskRedux = ({callback}: TaskReduxTypeProps) => {
         //dispatch(changeTaskStatusAC(task.id, newIsDoneValue, todolistId))
     }
 
-    const onTitleChangeHandler = (newValue: string) => {
-        dispatch(changeTaskTitleAC(task.id, newValue, todolistId))
+    const onTitleChangeHandler = (model: UpdateTaskModelType) => {
+        dispatch(changeTaskTitleAC(task.id, model, todolistId))
     }
 
     return (
@@ -44,7 +44,7 @@ const TaskRedux = ({callback}: TaskReduxTypeProps) => {
                 checked={task.status===TaskStatuses.Completed}
                 color="primary"
                 onChange={onChangeHandler}/>
-            <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
+            {/*<EditableSpan value={task.title} onChange={onTitleChangeHandler}/>*/}
             <IconButton onClick={callback}>
                 <Delete/>
             </IconButton>

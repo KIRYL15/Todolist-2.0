@@ -1,8 +1,8 @@
 import React from 'react'
 import {combineReducers} from 'redux'
 import {v1} from 'uuid'
-import {tasksReducer} from "../reducers/tasks-reducer";
-import {todolistsReducer} from "../reducers/todolists-reducer";
+import {tasksReducer} from "../features/TodolistsList/tasks-reducer";
+import {todolistsReducer} from "../features/TodolistsList/todolists-reducer";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
