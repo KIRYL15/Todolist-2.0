@@ -94,7 +94,6 @@ export const ChangeTodolistsEntityStatusAC = (id: string, status: RequestStatusT
 
 //thunk
 export const getTodolistsTC = () => (dispatch: Dispatch) => {
-
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.getTodolists()
         .then((response) => {

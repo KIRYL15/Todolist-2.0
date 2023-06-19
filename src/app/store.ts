@@ -4,6 +4,7 @@ import {todolistsReducer} from '../features/TodolistsList/todolists-reducer';
 import thunk, {ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {appReducer} from "./app-reducer";
+import {authReducer} from "../features/Login/auth-reducer";
 
 declare global {
     interface Window {
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
     app: appReducer,
+    auth:authReducer
 })
 //HOC
 type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>

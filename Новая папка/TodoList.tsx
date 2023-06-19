@@ -10,8 +10,7 @@ import {AppRootStateType, useAppDispatch} from "../../../app/store";
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import {
     ChangeTodolistFilterAC,
-    changeTodolistTitleTC, deleteTodolistTC,
-    TodolistDomainType
+    changeTodolistTitleTC, deleteTodolistTC, TodolistDomainType
 } from "../todolists-reducer";
 type PropsType = {
     todolist: TodolistDomainType
@@ -20,6 +19,8 @@ export const Todolist = React.memo(({todolist}: PropsType) => {
     const {id, title, filter, entityStatus} = todolist
     let tasks = useSelector<AppRootStateType, Array<TaskType>>((state => state.tasks[id]))
     const dispatch = useAppDispatch()
+
+
     useEffect(()=>{
         dispatch(getTasksTC(id))
     },[])

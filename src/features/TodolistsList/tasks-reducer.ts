@@ -1,5 +1,4 @@
 import {Dispatch} from "redux";
-import {TasksStateType} from "../../app/App";
 import {AppRootStateType} from "../../app/store";
 import {AddTodolistAT, RemoveTodolisAT, SetTodolistsTypeAT} from "./todolists-reducer";
 import {
@@ -19,7 +18,9 @@ export type AddTaskActionType = ReturnType<typeof addTasksAC>
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 export type SetTasksAT = ReturnType<typeof setTasksAC>
-
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
 export type ActionType =
     RemoveTaskActionType
     | AddTaskActionType
