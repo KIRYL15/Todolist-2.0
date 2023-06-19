@@ -30,7 +30,8 @@ export const Todolist1 = React.memo(function ({...props}: PropsType) {
     }, [])
 
     const addTask = useCallback((title: string) => {
-        props.addTask(title, props.todolist.id)
+        debugger
+        props.addTask(props.todolist.id, title)
     }, [props.addTask, props.todolist.id])
 
     const removeTodolist = () => {

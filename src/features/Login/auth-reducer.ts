@@ -3,6 +3,7 @@ import {SetErrorACType, setLoadingStatusAC, SetStatusACType} from '../../app/app
 import {LoginType} from "./Login";
 import {authAPI, ResultCode} from "../../api/todolists-api";
 import {handleServerAppError} from "../../utils/error-utils";
+import {ClearTodosDataAC, ClearTodosDataACType} from "../TodolistsList/todolists-reducer";
 
 const initialState = {
     isLoggedIn: false,
@@ -67,6 +68,7 @@ export const logOutTC = () => (dispatch: Dispatch<ActionsType>) => {
             if (response.data.resultCode === ResultCode.OK) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setLoadingStatusAC('succeeded'))
+                dispatch(ClearTodosDataAC())
             } else {
                 handleServerAppError(dispatch, response.data)
             }
@@ -81,3 +83,4 @@ type ActionsType =
     | ReturnType<typeof setIsInitializedAC>
     | SetStatusACType
     | SetErrorACType
+    | ClearTodosDataACType

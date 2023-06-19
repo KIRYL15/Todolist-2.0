@@ -17,6 +17,7 @@ export const AddItemForm=memo((props: AddItemFormPropsType)=> {
             setError("Title is required");
         }
     }
+    console.log("setTitle:", setTitle)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {setTitle(e.currentTarget.value)}
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         //благодаря if (error), избавляемся от лишней перерисовки

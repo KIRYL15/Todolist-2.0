@@ -61,7 +61,7 @@ export type TaskType = {
     order: number
     addedDate: string
 }
-type GetTaskResponse<D = {}> = {
+type GetTaskResponse = {
     items: Array<TaskType>
     totalCount: string
     error: string | null
@@ -83,6 +83,7 @@ export const todolistsAPI = {
 }
 export const tasksAPI = {
     createTask(todolistId: string, title: string) {
+        debugger
         return instance.post<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, {title: title})
     },
     getTasks(todolistId: string) {
@@ -92,6 +93,7 @@ export const tasksAPI = {
         return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+        debugger
         return instance.put<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, UpdateTaskModelType>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
     }
 }
